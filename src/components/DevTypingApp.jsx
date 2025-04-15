@@ -189,11 +189,11 @@ fetchData()
     reader.readAsText(file);
   };
 
-  const getSpeedClass = () => {
-    if (completed) return "typing-area-completed";
-    if (wpm > 60) return "typing-area-hot"; // 🔥 Hot!
-    if (wpm > 40) return "typing-area-warm"; // Warm
-    return "typing-area-cool"; // Cool
+  const getGradientColor = () => {
+    if (completed) return "bg-green-100 dark:bg-green-900 dark:bg-opacity-50";
+    if (wpm > 60) return "bg-red-50 dark:bg-red-900 dark:bg-opacity-30"; // 🔥 Hot!
+    if (wpm > 40) return "bg-orange-50 dark:bg-orange-900 dark:bg-opacity-30"; // Warm
+    return "bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30"; // Cool
   };
 
   const getEmojiForWPM = () => {
@@ -211,28 +211,26 @@ fetchData()
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  const theme = darkMode ? 'dark' : 'light';
-
   return (
-    <div className={`app-container ${theme}`}>
-      <header className={`header ${theme}`}>
-        <div className="header-container">
-          <h1 className="app-title">
+    <div className={`flex flex-col min-h-screen ${darkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+      <header className="p-4 bg-gray-100 dark:bg-gray-800 shadow">
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-2xl font-bold flex items-center">
             <span>⌨️</span> 
-            <span style={{ marginLeft: '0.5rem' }}>DevTyping</span>
+            <span className="ml-2">DevTyping</span>
           </h1>
-          <div className="controls">
+          <div className="flex space-x-4">
             <select 
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className={`select ${theme}`}
+              className="px-3 py-1 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             >
               <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
             </select>
             <button 
               onClick={() => setDarkMode(!darkMode)}
-              className={`button ${theme}`}
+              className="px-3 py-1 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             >
               {darkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
@@ -240,14 +238,14 @@ fetchData()
         </div>
       </header>
 
-      <main className="main">
-        <div className="container">
-          <div className="toolbar">
-            <div className="snippet-controls">
+      <main className="flex-grow p-4">
+        <div className="container mx-auto max-w-3xl">
+          <div className="mb-6 flex justify-between">
+            <div className="flex space-x-2">
               <select 
                 value={currentSnippet?.id}
                 onChange={handleSnippetChange}
-                className={`select ${theme}`}
+                className="px-3 py-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
                 <optgroup label={selectedLanguage === 'python' ? 'Python Snippets' : 'JavaScript Snippets'}>
                   {sampleSnippets[selectedLanguage].map(snippet => (
@@ -268,68 +266,67 @@ fetchData()
                   </optgroup>
                 )}
               </select>
-              <label className={`file-label ${theme}`}>
+              <label className="px-3 py-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white cursor-pointer">
                 📁 Upload
                 <input 
                   type="file" 
                   accept=".py,.js,.txt" 
                   onChange={handleFileUpload}
-                  className="file-input"
+                  className="hidden"
                 />
               </label>
             </div>
-            <div className="metrics">
-              <div className="metric">
-                <div className="metric-label">Time</div>
-                <div className="metric-value">{formatTime(elapsedTime)}</div>
+            <div className="flex space-x-4 items-center">
+              <div className="text-center">
+                <div className="text-sm text-gray-600 dark:text-gray-400">Time</div>
+                <div className="font-mono text-lg">{formatTime(elapsedTime)}</div>
               </div>
-              <div className="metric" style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="text-center flex items-center">
                 <div>
-                  <div className="metric-label">WPM</div>
-                  <div className="metric-value">{wpm}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">WPM</div>
+                  <div className="font-mono text-lg">{wpm}</div>
                 </div>
-                <div className="emoji">{getEmojiForWPM()}</div>
+                <div className="text-2xl ml-2">{getEmojiForWPM()}</div>
               </div>
             </div>
           </div>
 
           {currentSnippet && (
             <>
-              <div className="snippet-container">
-                <div className={`snippet-header ${theme}`}>
-                  <div className="snippet-title">{currentSnippet.name}</div>
-                  <div className="snippet-language">
+              <div className="mb-4">
+                <div className="p-4 rounded-t-lg bg-gray-200 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700 flex justify-between items-center">
+                  <div className="font-medium">{currentSnippet.name}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
                     {selectedLanguage === 'python' ? '🐍 Python' : '🟨 JavaScript'}
                   </div>
                 </div>
-                <div className={`snippet-content ${theme}`}>
+                <div className="p-4 bg-gray-100 dark:bg-gray-800 font-mono text-sm md:text-base overflow-x-auto rounded-b-lg border border-gray-300 dark:border-gray-700">
                   {visibleLines.map((line, idx) => (
-                    <div key={idx} className="line">{line}</div>
+                    <pre key={idx} className="mb-1 dark:text-gray-200">{line}</pre>
                   ))}
                   {visibleLines.length < 3 && Array(3 - visibleLines.length).fill().map((_, idx) => (
-                    <div key={`empty-${idx}`} className="line">&nbsp;</div>
+                    <pre key={`empty-${idx}`} className="mb-1 dark:text-gray-200">&nbsp;</pre>
                   ))}
                 </div>
               </div>
 
-              <div className={`typing-area ${getSpeedClass()} ${theme}`}>
+              <div className={`relative mb-6 ${getGradientColor()} rounded-lg p-4 border border-gray-300 dark:border-gray-700 transition-colors duration-300`}>
                 <textarea
                   ref={inputRef}
                   value={userInput}
                   onChange={handleInputChange}
                   disabled={completed}
                   placeholder="Start typing here..."
-                  className={`textarea ${theme}`}
+                  className="w-full h-32 bg-transparent font-mono text-sm md:text-base p-0 focus:outline-none resize-none dark:text-white"
                   autoFocus
                 />
                 {completed && (
-                  <div className="completion-overlay">
-                    <div className="completion-message">
-                      <div className="completion-emoji">🎉</div>
-                      <div>Completed!</div>
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 rounded-lg">
+                    <div className="text-center">
+                      <div className="text-2xl mb-2">🎉 Completed!</div>
                       <button 
                         onClick={resetPractice}
-                        className="completion-button"
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
                       >
                         Try Again
                       </button>
@@ -340,10 +337,10 @@ fetchData()
             </>
           )}
 
-          <div className="reset-container">
+          <div className="text-center">
             <button 
               onClick={resetPractice}
-              className={`reset-button ${theme}`}
+              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded"
             >
               Reset
             </button>
@@ -351,7 +348,7 @@ fetchData()
         </div>
       </main>
 
-      <footer className={`footer ${theme}`}>
+      <footer className="p-4 text-center text-gray-600 dark:text-gray-400 text-sm">
         <p>Practice makes perfect! Keep coding faster 💻</p>
       </footer>
     </div>
