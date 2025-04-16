@@ -1,13 +1,12 @@
-/* Base styles from Tailwind */
-@import 'tailwindcss/preflight';
+@layer tw.preflight;
+@layer tw.base;
+@layer tw.components;
+@layer tw.utilities;
 
-/* Tailwind utilities */
-@tailwind utilities;
-
-/* Add any additional global styles here */
+/* Custom styles */
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 }
 
 #root {

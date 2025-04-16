@@ -1,3 +1,4 @@
+// src/components/DevTypingApp.jsx
 import React, { useState, useEffect, useRef } from 'react';
 
 const DevTypingApp = () => {
@@ -190,10 +191,10 @@ fetchData()
   };
 
   const getGradientColor = () => {
-    if (completed) return "bg-green-100 dark:bg-green-900 dark:bg-opacity-50";
-    if (wpm > 60) return "bg-red-50 dark:bg-red-900 dark:bg-opacity-30"; // 🔥 Hot!
-    if (wpm > 40) return "bg-orange-50 dark:bg-orange-900 dark:bg-opacity-30"; // Warm
-    return "bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30"; // Cool
+    if (completed) return "bg-green-100 dark:bg-green-800";
+    if (wpm > 60) return "bg-red-100 dark:bg-red-900"; // 🔥 Hot!
+    if (wpm > 40) return "bg-amber-100 dark:bg-amber-900"; // Warm
+    return "bg-blue-100 dark:bg-blue-900"; // Cool
   };
 
   const getEmojiForWPM = () => {
@@ -212,25 +213,24 @@ fetchData()
   };
 
   return (
-    <div className={`flex flex-col min-h-screen ${darkMode ? 'dark bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
-      <header className="p-4 bg-gray-100 dark:bg-gray-800 shadow">
-        <div className="container mx-auto flex justify-between items-center">
+    <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
+      <header className="p-4 bg-gray-100 dark:bg-gray-800 shadow border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <h1 className="text-2xl font-bold flex items-center">
-            <span>⌨️</span> 
-            <span className="ml-2">DevTyping</span>
+            <span className="mr-2">⌨️</span>DevTyping
           </h1>
-          <div className="flex space-x-4">
+          <div className="flex flex-wrap gap-3">
             <select 
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="px-3 py-1 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
             >
               <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
             </select>
             <button 
               onClick={() => setDarkMode(!darkMode)}
-              className="px-3 py-1 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
             >
               {darkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
@@ -238,14 +238,15 @@ fetchData()
         </div>
       </header>
 
-      <main className="flex-grow p-4">
-        <div className="container mx-auto max-w-3xl">
-          <div className="mb-6 flex justify-between">
-            <div className="flex space-x-2">
+      <main className="p-4">
+        <div className="max-w-3xl mx-auto">
+          {/* Snippet Controls */}
+          <div className="mb-6 flex flex-col sm:flex-row justify-between gap-4">
+            <div className="flex flex-wrap gap-2">
               <select 
                 value={currentSnippet?.id}
                 onChange={handleSnippetChange}
-                className="px-3 py-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
               >
                 <optgroup label={selectedLanguage === 'python' ? 'Python Snippets' : 'JavaScript Snippets'}>
                   {sampleSnippets[selectedLanguage].map(snippet => (
@@ -266,7 +267,7 @@ fetchData()
                   </optgroup>
                 )}
               </select>
-              <label className="px-3 py-2 rounded border dark:bg-gray-700 dark:border-gray-600 dark:text-white cursor-pointer">
+              <label className="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 cursor-pointer">
                 📁 Upload
                 <input 
                   type="file" 
@@ -276,7 +277,7 @@ fetchData()
                 />
               </label>
             </div>
-            <div className="flex space-x-4 items-center">
+            <div className="flex gap-6 items-center">
               <div className="text-center">
                 <div className="text-sm text-gray-600 dark:text-gray-400">Time</div>
                 <div className="font-mono text-lg">{formatTime(elapsedTime)}</div>
@@ -291,6 +292,7 @@ fetchData()
             </div>
           </div>
 
+          {/* Code Display */}
           {currentSnippet && (
             <>
               <div className="mb-4">
@@ -300,16 +302,17 @@ fetchData()
                     {selectedLanguage === 'python' ? '🐍 Python' : '🟨 JavaScript'}
                   </div>
                 </div>
-                <div className="p-4 bg-gray-100 dark:bg-gray-800 font-mono text-sm md:text-base overflow-x-auto rounded-b-lg border border-gray-300 dark:border-gray-700">
+                <div className="p-4 bg-gray-100 dark:bg-gray-800 font-mono text-sm overflow-x-auto rounded-b-lg border border-gray-300 dark:border-gray-700">
                   {visibleLines.map((line, idx) => (
-                    <pre key={idx} className="mb-1 dark:text-gray-200">{line}</pre>
+                    <div key={idx} className="mb-1 whitespace-pre">{line}</div>
                   ))}
                   {visibleLines.length < 3 && Array(3 - visibleLines.length).fill().map((_, idx) => (
-                    <pre key={`empty-${idx}`} className="mb-1 dark:text-gray-200">&nbsp;</pre>
+                    <div key={`empty-${idx}`} className="mb-1">&nbsp;</div>
                   ))}
                 </div>
               </div>
 
+              {/* Typing Area */}
               <div className={`relative mb-6 ${getGradientColor()} rounded-lg p-4 border border-gray-300 dark:border-gray-700 transition-colors duration-300`}>
                 <textarea
                   ref={inputRef}
@@ -317,7 +320,7 @@ fetchData()
                   onChange={handleInputChange}
                   disabled={completed}
                   placeholder="Start typing here..."
-                  className="w-full h-32 bg-transparent font-mono text-sm md:text-base p-0 focus:outline-none resize-none dark:text-white"
+                  className="w-full h-32 bg-transparent font-mono text-sm p-0 focus:outline-none resize-none"
                   autoFocus
                 />
                 {completed && (
@@ -337,6 +340,7 @@ fetchData()
             </>
           )}
 
+          {/* Reset Button */}
           <div className="text-center">
             <button 
               onClick={resetPractice}
@@ -348,7 +352,7 @@ fetchData()
         </div>
       </main>
 
-      <footer className="p-4 text-center text-gray-600 dark:text-gray-400 text-sm">
+      <footer className="p-4 text-center text-gray-600 dark:text-gray-400 text-sm mt-8">
         <p>Practice makes perfect! Keep coding faster 💻</p>
       </footer>
     </div>
