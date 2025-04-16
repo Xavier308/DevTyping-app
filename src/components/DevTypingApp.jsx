@@ -1,5 +1,6 @@
 // src/components/DevTypingApp.jsx
 import React, { useState, useEffect, useRef } from 'react';
+import '../styles/DevTypingApp.css'; // Import the CSS file we'll create
 
 const DevTypingApp = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -190,11 +191,12 @@ fetchData()
     reader.readAsText(file);
   };
 
-  const getGradientColor = () => {
-    if (completed) return "bg-green-100 dark:bg-green-800";
-    if (wpm > 60) return "bg-red-100 dark:bg-red-900"; // 🔥 Hot!
-    if (wpm > 40) return "bg-amber-100 dark:bg-amber-900"; // Warm
-    return "bg-blue-100 dark:bg-blue-900"; // Cool
+  const getTypingAreaClass = () => {
+    const theme = darkMode ? 'dark' : 'light';
+    if (completed) return `typing-area typing-area-completed ${theme}`;
+    if (wpm > 60) return `typing-area typing-area-hot ${theme}`; // 🔥 Hot!
+    if (wpm > 40) return `typing-area typing-area-warm ${theme}`; // Warm
+    return `typing-area typing-area-cool ${theme}`; // Cool
   };
 
   const getEmojiForWPM = () => {
@@ -213,24 +215,24 @@ fetchData()
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}`}>
-      <header className="p-4 bg-gray-100 dark:bg-gray-800 shadow border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <h1 className="text-2xl font-bold flex items-center">
-            <span className="mr-2">⌨️</span>DevTyping
+    <div className={`app-container ${darkMode ? 'dark' : 'light'}`}>
+      <header className={`header ${darkMode ? 'dark' : 'light'}`}>
+        <div className="header-container">
+          <h1 className="app-title">
+            <span className="emoji">⌨️</span>DevTyping
           </h1>
-          <div className="flex flex-wrap gap-3">
+          <div className="controls">
             <select 
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
+              className={`select ${darkMode ? 'dark' : 'light'}`}
             >
               <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
             </select>
             <button 
               onClick={() => setDarkMode(!darkMode)}
-              className="px-3 py-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
+              className={`button ${darkMode ? 'dark' : 'light'}`}
             >
               {darkMode ? '☀️ Light' : '🌙 Dark'}
             </button>
@@ -238,15 +240,15 @@ fetchData()
         </div>
       </header>
 
-      <main className="p-4">
-        <div className="max-w-3xl mx-auto">
+      <main className="main">
+        <div className="container">
           {/* Snippet Controls */}
-          <div className="mb-6 flex flex-col sm:flex-row justify-between gap-4">
-            <div className="flex flex-wrap gap-2">
+          <div className="toolbar">
+            <div className="snippet-controls">
               <select 
                 value={currentSnippet?.id}
                 onChange={handleSnippetChange}
-                className="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
+                className={`select ${darkMode ? 'dark' : 'light'}`}
               >
                 <optgroup label={selectedLanguage === 'python' ? 'Python Snippets' : 'JavaScript Snippets'}>
                   {sampleSnippets[selectedLanguage].map(snippet => (
@@ -267,27 +269,25 @@ fetchData()
                   </optgroup>
                 )}
               </select>
-              <label className="px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 cursor-pointer">
+              <label className={`file-label ${darkMode ? 'dark' : 'light'}`}>
                 📁 Upload
                 <input 
                   type="file" 
                   accept=".py,.js,.txt" 
                   onChange={handleFileUpload}
-                  className="hidden"
+                  className="file-input"
                 />
               </label>
             </div>
-            <div className="flex gap-6 items-center">
-              <div className="text-center">
-                <div className="text-sm text-gray-600 dark:text-gray-400">Time</div>
-                <div className="font-mono text-lg">{formatTime(elapsedTime)}</div>
+            <div className="metrics">
+              <div className="metric">
+                <div className="metric-label">Time</div>
+                <div className="metric-value">{formatTime(elapsedTime)}</div>
               </div>
-              <div className="text-center flex items-center">
-                <div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">WPM</div>
-                  <div className="font-mono text-lg">{wpm}</div>
-                </div>
-                <div className="text-2xl ml-2">{getEmojiForWPM()}</div>
+              <div className="metric">
+                <div className="metric-label">WPM</div>
+                <div className="metric-value">{wpm}</div>
+                <span className="emoji">{getEmojiForWPM()}</span>
               </div>
             </div>
           </div>
@@ -295,41 +295,42 @@ fetchData()
           {/* Code Display */}
           {currentSnippet && (
             <>
-              <div className="mb-4">
-                <div className="p-4 rounded-t-lg bg-gray-200 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-700 flex justify-between items-center">
-                  <div className="font-medium">{currentSnippet.name}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="snippet-container">
+                <div className={`snippet-header ${darkMode ? 'dark' : 'light'}`}>
+                  <div className="snippet-title">{currentSnippet.name}</div>
+                  <div className="snippet-language">
                     {selectedLanguage === 'python' ? '🐍 Python' : '🟨 JavaScript'}
                   </div>
                 </div>
-                <div className="p-4 bg-gray-100 dark:bg-gray-800 font-mono text-sm overflow-x-auto rounded-b-lg border border-gray-300 dark:border-gray-700">
+                <div className={`snippet-content ${darkMode ? 'dark' : 'light'}`}>
                   {visibleLines.map((line, idx) => (
-                    <div key={idx} className="mb-1 whitespace-pre">{line}</div>
+                    <div key={idx} className="line">{line}</div>
                   ))}
                   {visibleLines.length < 3 && Array(3 - visibleLines.length).fill().map((_, idx) => (
-                    <div key={`empty-${idx}`} className="mb-1">&nbsp;</div>
+                    <div key={`empty-${idx}`} className="line">&nbsp;</div>
                   ))}
                 </div>
               </div>
 
               {/* Typing Area */}
-              <div className={`relative mb-6 ${getGradientColor()} rounded-lg p-4 border border-gray-300 dark:border-gray-700 transition-colors duration-300`}>
+              <div className={getTypingAreaClass()}>
                 <textarea
                   ref={inputRef}
                   value={userInput}
                   onChange={handleInputChange}
                   disabled={completed}
                   placeholder="Start typing here..."
-                  className="w-full h-32 bg-transparent font-mono text-sm p-0 focus:outline-none resize-none"
+                  className={`textarea ${darkMode ? 'dark' : 'light'}`}
                   autoFocus
                 />
                 {completed && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 rounded-lg">
-                    <div className="text-center">
-                      <div className="text-2xl mb-2">🎉 Completed!</div>
+                  <div className="completion-overlay">
+                    <div className="completion-message">
+                      <div className="completion-emoji">🎉</div>
+                      <div>Completed!</div>
                       <button 
                         onClick={resetPractice}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded"
+                        className="completion-button"
                       >
                         Try Again
                       </button>
@@ -341,10 +342,10 @@ fetchData()
           )}
 
           {/* Reset Button */}
-          <div className="text-center">
+          <div className="reset-container">
             <button 
               onClick={resetPractice}
-              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded"
+              className={`reset-button ${darkMode ? 'dark' : 'light'}`}
             >
               Reset
             </button>
@@ -352,7 +353,7 @@ fetchData()
         </div>
       </main>
 
-      <footer className="p-4 text-center text-gray-600 dark:text-gray-400 text-sm mt-8">
+      <footer className={`footer ${darkMode ? 'dark' : 'light'}`}>
         <p>Practice makes perfect! Keep coding faster 💻</p>
       </footer>
     </div>

@@ -1,9 +1,4 @@
-@layer tw.preflight;
-@layer tw.base;
-@layer tw.components;
-@layer tw.utilities;
-
-/* Custom styles */
+/* Base styles */
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
