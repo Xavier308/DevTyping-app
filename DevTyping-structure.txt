@@ -1,0 +1,41 @@
+# DevTyping App - Restructured Project
+
+## Directory Structure
+
+```
+src/
+├── components/
+│   ├── DevTypingApp.jsx           # Main container component (smaller now)
+│   ├── Header.jsx                 # App header with language selection and theme toggle
+│   ├── Footer.jsx                 # App footer
+│   ├── TypingArea/
+│   │   ├── CodeDisplay.jsx        # The code display with line numbers and syntax highlighting
+│   │   ├── TypeTracker.jsx        # Hidden textarea and typing logic
+│   │   └── CompletionOverlay.jsx  # Overlay for paused/completed states
+│   ├── Controls/
+│   │   ├── SnippetSelector.jsx    # Dropdown for snippet selection
+│   │   ├── FileUploader.jsx       # File upload button
+│   │   ├── Metrics.jsx            # Timer and WPM display
+│   │   └── ResetButton.jsx        # Reset button
+├── hooks/
+│   ├── useTypingLogic.js          # Typing logic, error detection, cursor positioning
+│   ├── useTimer.js                # Timer logic and WPM calculation
+│   └── useSnippetManager.js       # Snippet loading and management
+├── data/
+│   └── sampleSnippets.js          # Sample code snippets
+├── utils/
+│   └── helpers.js                 # Helper functions (emoji, formatting)
+├── styles/
+│   ├── variables.css              # CSS variables and base styles
+│   ├── components/
+│   │   ├── Header.css
+│   │   ├── Footer.css
+│   │   ├── CodeDisplay.css
+│   │   ├── Controls.css
+│   │   └── Overlay.css
+│   └── themes/
+│       ├── light.css
+│       └── dark.css
+├── App.jsx                        # Unchanged
+└── main.jsx                       # Unchanged
+```

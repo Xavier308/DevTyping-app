@@ -1,0 +1,63 @@
+/* src/styles/components/Header.css */
+
+.header {
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header.light {
+    background-color: var(--color-header-light);
+  }
+  
+  .header.dark {
+    background-color: var(--color-header-dark);
+  }
+  
+  .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .app-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .select, .button {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+    background: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+  
+  .select.light, .button.light {
+    border-color: var(--color-border-light);
+    color: var(--color-text-light);
+  }
+  
+  .select.dark, .button.dark {
+    border-color: var(--color-border-dark);
+    background-color: var(--color-header-dark);
+    color: var(--color-text-dark);
+  }
+  
+  .button:hover.light {
+    background-color: var(--color-button-hover-light);
+  }
+  
+  .button:hover.dark {
+    background-color: var(--color-button-hover-dark);
+  }

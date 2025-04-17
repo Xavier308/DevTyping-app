@@ -1,0 +1,19 @@
+/* src/styles/components/TypeTracker.css */
+
+.input-area {
+    position: relative;
+    height: 1px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  
+  .hidden-textarea {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    opacity: 0;
+    width: 100px;
+    height: 20px;
+    overflow: hidden;
+    white-space: pre;
+  }

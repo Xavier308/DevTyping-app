@@ -1,0 +1,14 @@
+/* src/styles/components/Footer.css */
+
+.footer {
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .footer.light {
+    color: var(--color-secondary-light);
+  }
+  
+  .footer.dark {
+    color: var(--color-secondary-dark);
+  }

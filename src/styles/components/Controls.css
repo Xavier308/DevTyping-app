@@ -1,0 +1,116 @@
+/* src/styles/components/Controls.css */
+
+/* Toolbar */
+.toolbar {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .snippet-controls {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* File uploader */
+  .file-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+    cursor: pointer;
+    gap: 6px;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .file-label.light {
+    border-color: var(--color-border-light);
+    color: var(--color-text-light);
+  }
+  
+  .file-label.dark {
+    border-color: var(--color-border-dark);
+    background-color: var(--color-header-dark);
+    color: var(--color-text-dark);
+  }
+  
+  .file-label:hover.light {
+    background-color: var(--color-button-hover-light);
+  }
+  
+  .file-label:hover.dark {
+    background-color: var(--color-button-hover-dark);
+  }
+  
+  /* Metrics display */
+  .metrics {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  
+  .metric {
+    text-align: center;
+    position: relative;
+  }
+  
+  .metric-label {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+  
+  .metric-value {
+    font-family: monospace;
+    font-size: 1.25rem;
+  }
+  
+  .emoji {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 50%;
+    right: -1.8rem;
+    transform: translateY(-50%);
+  }
+  
+  /* Reset button */
+  .reset-container {
+    text-align: center;
+    margin: 1.5rem 0;
+  }
+  
+  .reset-button {
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .reset-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .reset-button.light {
+    background-color: var(--color-snippet-header-light);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-light);
+  }
+  
+  .reset-button.dark {
+    background-color: var(--color-header-dark);
+    border: 1px solid var(--color-border-dark);
+    color: var(--color-text-dark);
+  }
+  
+  .reset-button:not(:disabled):hover.light {
+    background-color: var(--color-button-hover-light);
+  }
+  
+  .reset-button:not(:disabled):hover.dark {
+    background-color: var(--color-button-hover-dark);
+  }

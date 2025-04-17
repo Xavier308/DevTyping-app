@@ -1,0 +1,119 @@
+/* src/styles/variables.css */
+
+/* Import theme files */
+@import './themes/light.css';
+@import './themes/dark.css';
+
+/* Base styles for the entire app */
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+body {
+  overflow-y: auto;
+  position: fixed;
+  inset: 0;
+}
+
+#root {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Color variables */
+:root {
+  /* Light theme */
+  --color-bg-light: #f9fafb;
+  --color-text-light: #1f2937;
+  --color-secondary-light: #6b7280;
+  --color-border-light: #d1d5db;
+  --color-header-light: #f3f4f6;
+  --color-snippet-header-light: #e5e7eb;
+  --color-snippet-bg-light: #f3f4f6;
+  
+  /* Dark theme */
+  --color-bg-dark: #111827;
+  --color-text-dark: #f9fafb;
+  --color-secondary-dark: #9ca3af;
+  --color-border-dark: #4b5563;
+  --color-header-dark: #1f2937;
+  --color-snippet-header-dark: #1f2937;
+  --color-snippet-bg-dark: #1f2937;
+  
+  /* Syntax highlighting */
+  --color-correct: #34d399;
+  --color-error: #ef4444;
+  --color-fixed: #f59e0b;
+  --color-cursor: #60a5fa;
+  
+  /* Buttons */
+  --color-button-hover-light: #d1d5db;
+  --color-button-hover-dark: #4b5563;
+  --color-completion-button: #3b82f6;
+  --color-completion-button-hover: #2563eb;
+}
+
+/* App container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: hidden;
+}
+
+/* Main content */
+.main {
+  flex-grow: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Loading placeholder */
+.loading-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.125rem;
+  color: var(--color-secondary-light);
+  border: 1px dashed var(--color-border-light);
+  border-radius: 0.5rem;
+}
+
+.app-container.dark .loading-placeholder {
+  color: var(--color-secondary-dark);
+  border-color: var(--color-border-dark);
+}
+
+/* Animation for blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}

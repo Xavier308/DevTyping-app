@@ -1,0 +1,59 @@
+/* src/styles/themes/dark.css */
+
+.app-container.dark {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-dark);
+  }
+  
+  /* Header */
+  .header.dark {
+    background-color: var(--color-header-dark);
+  }
+  
+  /* Form controls */
+  .select.dark, .button.dark, .file-label.dark {
+    border-color: var(--color-border-dark);
+    background-color: var(--color-header-dark);
+    color: var(--color-text-dark);
+  }
+  
+  .button:hover.dark, .file-label:hover.dark {
+    background-color: var(--color-button-hover-dark);
+  }
+  
+  /* Snippet container */
+  .snippet-header.dark {
+    background-color: var(--color-snippet-header-dark);
+    border-color: var(--color-border-dark);
+  }
+  
+  .snippet-content.dark {
+    background-color: var(--color-snippet-bg-dark);
+    border-color: var(--color-border-dark);
+  }
+  
+  /* Code display specifics for dark mode */
+  .line-number {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .line-numbers {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Reset button */
+  .reset-button.dark {
+    background-color: var(--color-header-dark);
+    border: 1px solid var(--color-border-dark);
+    color: var(--color-text-dark);
+  }
+  
+  .reset-button:hover.dark {
+    background-color: var(--color-button-hover-dark);
+  }
+  
+  /* Footer */
+  .footer.dark {
+    color: var(--color-secondary-dark);
+  }
