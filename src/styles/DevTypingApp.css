@@ -1,4 +1,4 @@
-/* DevTypingApp.css */
+/* DevTypingApp.css - Updated */
 
 html, body, #root {
   margin: 0;
@@ -114,6 +114,34 @@ html, body, #root {
   gap: 0.5rem;
 }
 
+/* FIX #2: Upload button alignment */
+.file-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid;
+  cursor: pointer;
+  gap: 6px;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label.light {
+  border-color: #d1d5db;
+  color: var(--color-text-light);
+}
+
+.file-label.dark {
+  border-color: #4b5563;
+  background-color: #374151;
+  color: var(--color-text-dark);
+}
+
+/* FIX #1: Metrics and emoji alignment */
 .metrics {
   display: flex;
   gap: 1rem;
@@ -122,6 +150,7 @@ html, body, #root {
 
 .metric {
   text-align: center;
+  position: relative;
 }
 
 .metric-label {
@@ -136,20 +165,24 @@ html, body, #root {
 
 .emoji {
   font-size: 1.5rem;
-  margin-left: 0.5rem;
+  position: absolute;
+  top: 50%;
+  right: -1.8rem;
+  transform: translateY(-50%);
 }
 
-/* Snippet Display */
+/* FIX #3: Snippet Display - More modern editor look */
 .snippet-container {
   margin-bottom: 1rem;
   width: 100%;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .snippet-header {
   padding: 1rem;
   border-bottom: 1px solid;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -175,16 +208,16 @@ html, body, #root {
 }
 
 .snippet-content {
-  padding: 1.5rem;
-  font-family: monospace;
-  font-size: 1.6rem;
-  font-weight: 500;
+  padding: 0;
+  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+  font-size: 1.25rem;
+  font-weight: 400;
   overflow-x: auto;
   border: 1px solid;
-  border-bottom-left-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
   min-height: 200px;
-  line-height: 1.8;
+  line-height: 1.5;
+  display: flex;
+  position: relative;
 }
 
 .snippet-content.light {
@@ -197,19 +230,66 @@ html, body, #root {
   border-color: #374151;
 }
 
-.code-display {
-  text-align: left;
+/* Line numbers and code display */
+.line-numbers {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.6rem;
+  text-align: right;
+  background-color: rgba(0, 0, 0, 0.1);
+  user-select: none;
+  min-width: 2rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.line {
-  margin-bottom: 1rem;
+.line-number {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+
+.code-display {
+  flex: 1;
+  text-align: left;
+  padding: 1rem 0 1rem 0.5rem;
   white-space: pre;
+  position: relative;
+}
+
+/* Indentation guides */
+.code-display::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 2.5rem; /* Position for first indent guide */
+  width: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.code-display::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 6.5rem; /* Position for second indent guide */
+  width: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Adjust line spacing */
+.line {
+  margin-bottom: 0; /* Reduced from 1rem */
+  white-space: pre;
+  position: relative;
+  padding-left: 0.5rem;
+  min-height: 1.5rem;
 }
 
 /* Character highlighting */
 .character {
   position: relative;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.01em; /* Slightly reduced letter spacing */
 }
 
 .character.pending {
@@ -242,7 +322,7 @@ html, body, #root {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 3px;
+  height: 2px;
   background-color: #60a5fa;
   animation: blink 1s ease-in-out infinite;
 }
@@ -425,28 +505,4 @@ html, body, #root {
 
 .footer.dark {
   color: #9ca3af;
-}
-
-/* File upload button */
-.file-input {
-  display: none;
-}
-
-.file-label {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  border: 1px solid;
-  cursor: pointer;
-}
-
-.file-label.light {
-  border-color: #d1d5db;
-  color: var(--color-text-light);
-}
-
-.file-label.dark {
-  border-color: #4b5563;
-  background-color: #374151;
-  color: var(--color-text-dark);
 }

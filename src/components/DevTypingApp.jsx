@@ -670,8 +670,9 @@ fetchData()
                   </optgroup>
                 )}
               </select>
-              <label className={`file-label button ${darkMode ? 'dark' : 'light'}`}>
-                 <span role="img" aria-label="folder emoji">📁</span> Upload
+              <label className={`file-label ${darkMode ? 'dark' : 'light'}`}>
+                <span role="img" aria-label="folder emoji">📁</span>
+                <span>Upload</span>
                 <input
                   type="file"
                   accept=".py,.js,.txt,text/plain"
@@ -708,18 +709,35 @@ fetchData()
                   </div>
                 </div>
                 {/* Code Display Area */}
-                <div
-                    className={`snippet-content code-display ${darkMode ? 'dark' : 'light'}`}
-                    onClick={() => inputRef.current?.focus()}
-                >
-                  {/* Render visible lines */}
-                   {visibleLines.map((line, idx) => renderCodeLine(line, idx))}
-                   {/* Add padding lines if snippet is shorter than visible count */}
-                   {visibleLines.length < VISIBLE_LINE_COUNT &&
-                     currentSnippet.code.split('\n').length > visibleLines.length && // Only add padding if there are more lines below
-                     Array(VISIBLE_LINE_COUNT - visibleLines.length).fill().map((_, idx) => (
-                       <div key={`empty-${idx + visibleLines.length}`} className="line"> </div>
-                   ))}
+                <div className={`snippet-content ${darkMode ? 'dark' : 'light'}`} onClick={() => inputRef.current?.focus()}>
+                  {/* Line numbers column */}
+                  <div className="line-numbers">
+                    {visibleLines.map((_, idx) => (
+                      <div key={`number-${idx + currentLineIndex + 1}`} className="line-number">
+                        {idx + currentLineIndex + 1}
+                      </div>
+                    ))}
+                    {/* Add padding numbers if snippet is shorter than visible count */}
+                    {visibleLines.length < VISIBLE_LINE_COUNT &&
+                      currentSnippet.code.split('\n').length > visibleLines.length &&
+                      Array(VISIBLE_LINE_COUNT - visibleLines.length).fill().map((_, idx) => (
+                        <div key={`number-empty-${idx + visibleLines.length}`} className="line-number">
+                          {idx + visibleLines.length + currentLineIndex + 1}
+                        </div>
+                      ))}
+                  </div>
+                  
+                  {/* Code display with your existing rendering */}
+                  <div className="code-display">
+                    {/* Render visible lines */}
+                    {visibleLines.map((line, idx) => renderCodeLine(line, idx))}
+                    {/* Add padding lines if snippet is shorter than visible count */}
+                    {visibleLines.length < VISIBLE_LINE_COUNT &&
+                      currentSnippet.code.split('\n').length > visibleLines.length &&
+                      Array(VISIBLE_LINE_COUNT - visibleLines.length).fill().map((_, idx) => (
+                        <div key={`empty-${idx + visibleLines.length}`} className="line"> </div>
+                      ))}
+                  </div>
                 </div>
               </div>
 
