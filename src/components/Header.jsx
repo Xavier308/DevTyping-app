@@ -16,10 +16,12 @@ const Header = ({ darkMode, setDarkMode, selectedLanguage, setSelectedLanguage }
   return (
     <header className={`header ${darkMode ? 'dark' : 'light'}`}>
       <div className="header-container">
+        {/* Change #3: App title aligned more to the left */}
         <h1 className="app-title">
           <span role="img" aria-label="keyboard emoji">⌨️</span>DevTyping
         </h1>
         
+        {/* Change #3: Controls aligned more to the right */}
         <div className="controls">
           <select
             value={selectedLanguage}

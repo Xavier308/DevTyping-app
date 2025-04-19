@@ -183,35 +183,18 @@ const DevTypingApp = () => {
       
       <main className="main">
         <div className="container">
-          <div className="toolbar">
-            <div className="snippet-controls">
-              {getAvailableSnippets && (
-                <SnippetSelector 
-                  currentSnippet={currentSnippet}
-                  darkMode={darkMode}
-                  availableSnippets={getAvailableSnippets()}
-                  uploadedSnippets={uploadedSnippets}
-                  selectedLanguage={selectedLanguage}
-                  handleSnippetChange={handleSnippetChange}
-                />
-              )}
-              
-              <FileUploader 
-                darkMode={darkMode}
-                handleFileUpload={handleFileUpload}
-              />
-            </div>
-            
-            <Metrics 
-              currentElapsedTime={currentElapsedTime}
-              formatTime={formatTime}
-              wpm={wpm}
-              getEmojiForWPM={getWpmEmoji}
-            />
-          </div>
-          
           {currentSnippet ? (
             <>
+              {/* Metrics display above code */}
+              <div className="toolbar">
+                <Metrics 
+                  currentElapsedTime={currentElapsedTime}
+                  formatTime={formatTime}
+                  wpm={wpm}
+                  getEmojiForWPM={getWpmEmoji}
+                />
+              </div>
+            
               <div className="snippet-container">
                 <div className={`snippet-header ${darkMode ? 'dark' : 'light'}`}>
                   <div className="snippet-title">{currentSnippet.name}</div>
@@ -245,6 +228,35 @@ const DevTypingApp = () => {
                 completed={completed}
               />
               
+              {/* Final adjustment: Reduce margin to bring controls closer to code display */}
+              <div className="control-container" style={{ position: 'relative', height: '50px', marginTop: '0.5rem' }}>
+                {/* Snippet controls closer to the code display */}
+                <div className="snippet-controls">
+                  {getAvailableSnippets && (
+                    <SnippetSelector 
+                      currentSnippet={currentSnippet}
+                      darkMode={darkMode}
+                      availableSnippets={getAvailableSnippets()}
+                      uploadedSnippets={uploadedSnippets}
+                      selectedLanguage={selectedLanguage}
+                      handleSnippetChange={handleSnippetChange}
+                    />
+                  )}
+                  
+                  <FileUploader 
+                    darkMode={darkMode}
+                    handleFileUpload={handleFileUpload}
+                  />
+                </div>
+                
+                {/* Reset button stays at bottom right */}
+                <ResetButton 
+                  darkMode={darkMode}
+                  resetPractice={resetPractice}
+                  currentSnippet={currentSnippet}
+                />
+              </div>
+              
               {(completed || isPaused) && (
                 <CompletionOverlay 
                   darkMode={darkMode}
@@ -259,12 +271,6 @@ const DevTypingApp = () => {
               Select a snippet or upload a file to begin.
             </div>
           )}
-          
-          <ResetButton 
-            darkMode={darkMode}
-            resetPractice={resetPractice}
-            currentSnippet={currentSnippet}
-          />
         </div>
       </main>
       
