@@ -20,7 +20,13 @@ A lightweight application for developers to practice typing code snippets. Impro
 ### Installation
 
 1. Clone this repository or download the files
+   ```bash
+   git clone https://github.com/Xavier308/DevTyping-app.git
+   ```
 2. Navigate to the project directory in your terminal
+   ```bash
+   cd DevTyping-app
+   ```
 3. Install dependencies:
    ```bash
    npm install
