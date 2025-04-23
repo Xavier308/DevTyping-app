@@ -6,7 +6,7 @@ const sampleSnippets = {
         name: 'Quick Sort',
         code: `def quick_sort(arr):
       if len(arr) <= 1:
-          return arr
+        return arr
       pivot = arr[len(arr) // 2]
       left = [x for x in arr if x < pivot]
       middle = [x for x in arr if x == pivot]
@@ -21,13 +21,13 @@ const sampleSnippets = {
       high = len(arr) - 1
   
       while low <= high:
-          mid = (low + high) // 2
-          if arr[mid] < target:
-              low = mid + 1
-          elif arr[mid] > target:
-              high = mid - 1
-          else:
-              return mid
+        mid = (low + high) // 2
+        if arr[mid] < target:
+          low = mid + 1
+        elif arr[mid] > target:
+          high = mid - 1
+        else:
+          return mid
       return -1`
       }
     ],

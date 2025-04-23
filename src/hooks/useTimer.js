@@ -1,4 +1,3 @@
-// src/hooks/useTimer.js
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { calculateWPM } from '../utils/helpers';
 
@@ -7,7 +6,7 @@ const AUTO_PAUSE_DELAY = 3000; // Milliseconds of inactivity before pausing
 
 /**
  * Custom hook to manage timer functionality and WPM calculations
- * 
+ *
  * @param {Object} currentSnippet - The current code snippet object
  * @param {Array} typedLines - Array of typed text lines 
  * @param {Object} currentPosition - Current cursor position {line, char}
@@ -28,15 +27,26 @@ const useTimer = (currentSnippet, typedLines, currentPosition, errorPositions, c
   const intervalRef = useRef(null);
   const pauseTimerRef = useRef(null);
 
+  // Refs to keep latest typing state
+  const typedRef    = useRef(typedLines);
+  const positionRef = useRef(currentPosition);
+  const errorsRef   = useRef(errorPositions);
+  const snippetRef  = useRef(currentSnippet);
+
+  // Sync refs when values update
+  useEffect(() => { typedRef.current    = typedLines;       }, [typedLines]);
+  useEffect(() => { positionRef.current = currentPosition;  }, [currentPosition]);
+  useEffect(() => { errorsRef.current   = errorPositions;   }, [errorPositions]);
+  useEffect(() => { snippetRef.current  = currentSnippet;   }, [currentSnippet]);
+
   // Timer logic for WPM calculation
   useEffect(() => {
     // Clear any existing interval
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
-      intervalRef.current = null;
     }
 
-    // If user has started typing and isn't paused or completed
+    // Start interval if running
     if (startTime && !completed && !isPaused) {
       intervalRef.current = setInterval(() => {
         const now = Date.now();
@@ -46,60 +56,56 @@ const useTimer = (currentSnippet, typedLines, currentPosition, errorPositions, c
 
         // Calculate WPM based on correctly typed characters
         let correctChars = 0;
-        const snippetLines = currentSnippet?.code?.split('\n') || [];
-        
-        for (let i = 0; i < typedLines.length; i++) {
-          const typed = typedLines[i];
-          const target = snippetLines[i] || "";
-          
-          if (i < currentPosition.line) { // Count full correct lines
-            // Check if the line matches target AND has no recorded errors for that line
+        const snippetLines = snippetRef.current?.code?.split('\n') || [];
+
+        for (let i = 0; i < typedRef.current.length; i++) {
+          const typed = typedRef.current[i];
+          const target = snippetLines[i] || '';
+
+          if (i < positionRef.current.line) {
+            // Full line correct and no errors
             let lineHasError = false;
-            for (const key in errorPositions) {
-              if (key.startsWith(`${i}:`)) {
-                lineHasError = true;
-                break;
-              }
-            }
+            Object.keys(errorsRef.current).forEach(key => {
+              if (key.startsWith(`${i}:`)) lineHasError = true;
+            });
             if (typed === target && !lineHasError) {
-              correctChars += target.length + 1; // +1 for newline/enter
+              correctChars += target.length + 1; // +1 for newline
             }
-          } else if (i === currentPosition.line) { // Count correct chars on current line up to cursor
-            for (let j = 0; j < currentPosition.char; j++) {
-              // Check char match AND no error at that specific position
-              if (j < typed.length && j < target.length && typed[j] === target[j] && !errorPositions[`${i}:${j}`]) {
+          } else if (i === positionRef.current.line) {
+            // Partial line up to cursor
+            for (let j = 0; j < positionRef.current.char; j++) {
+              if (
+                j < typed.length &&
+                j < target.length &&
+                typed[j] === target[j] &&
+                !errorsRef.current[`${i}:${j}`]
+              ) {
                 correctChars++;
               }
             }
           }
         }
 
-        // Calculate WPM
         const minutes = totalElapsed / 60;
-        const calculatedWpm = minutes > 0 ? Math.round((correctChars / 5) / minutes) : 0;
-        setWpm(calculatedWpm);
+        const calculated = minutes > 0
+          ? Math.round((correctChars / 5) / minutes)
+          : 0;
+        setWpm(calculated);
       }, 1000);
     }
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [startTime, elapsedTime, completed, isPaused, typedLines, currentPosition, errorPositions, currentSnippet]);
+    return () => clearInterval(intervalRef.current);
+  }, [startTime, elapsedTime, isPaused, completed]);
 
   // Handle auto-pause
   useEffect(() => {
-    // Clear any existing auto-pause timer
     if (pauseTimerRef.current) {
       clearTimeout(pauseTimerRef.current);
-      pauseTimerRef.current = null;
     }
 
-    // Set up auto-pause timer if needed
     if (startTime && !completed && !isPaused && lastInputTime) {
       pauseTimerRef.current = setTimeout(() => {
-        console.log("Auto-pausing due to inactivity");
+        console.log('Auto-pausing due to inactivity');
         setIsPaused(true);
         const elapsedSinceStart = (Date.now() - startTime) / 1000;
         setElapsedTime(prev => prev + elapsedSinceStart);
@@ -107,17 +113,13 @@ const useTimer = (currentSnippet, typedLines, currentPosition, errorPositions, c
       }, AUTO_PAUSE_DELAY);
     }
 
-    return () => {
-      if (pauseTimerRef.current) {
-        clearTimeout(pauseTimerRef.current);
-      }
-    };
+    return () => clearTimeout(pauseTimerRef.current);
   }, [lastInputTime, startTime, completed, isPaused]);
 
-  // Start timer on first input if not already started
+  // Start timer on first input
   const startTimer = useCallback(() => {
     if (!startTime && !completed && !isPaused) {
-      console.log("Starting timer");
+      console.log('Starting timer');
       setStartTime(Date.now());
     }
   }, [startTime, completed, isPaused]);
@@ -125,7 +127,7 @@ const useTimer = (currentSnippet, typedLines, currentPosition, errorPositions, c
   // Resume from pause
   const resumeTimer = useCallback(() => {
     if (isPaused) {
-      console.log("Resuming timer");
+      console.log('Resuming timer');
       setIsPaused(false);
       setStartTime(Date.now());
     }
@@ -133,14 +135,10 @@ const useTimer = (currentSnippet, typedLines, currentPosition, errorPositions, c
 
   // Reset timer
   const resetTimer = useCallback(() => {
-    console.log("Resetting timer");
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    if (pauseTimerRef.current) {
-      clearTimeout(pauseTimerRef.current);
-    }
-    
+    console.log('Resetting timer');
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (pauseTimerRef.current) clearTimeout(pauseTimerRef.current);
+
     setStartTime(null);
     setElapsedTime(0);
     setCurrentElapsedTime(0);
@@ -149,18 +147,15 @@ const useTimer = (currentSnippet, typedLines, currentPosition, errorPositions, c
     setLastInputTime(null);
   }, []);
 
-  // Calculate final WPM
+  // Calculate final WPM on completion
   const calculateFinalWPM = useCallback(() => {
-    if (!currentSnippet?.code) return;
-    
-    const targetText = currentSnippet.code;
-    let correctChars = targetText.replace(/\n/g, '').length;
-    const finalTotalElapsed = currentElapsedTime || 0.1; // Prevent division by zero
-    
-    // Use helper function to calculate final WPM
-    const finalWpm = calculateWPM(correctChars, finalTotalElapsed);
+    const code = snippetRef.current?.code;
+    if (!code) return;
+    const charCount = code.replace(/\n/g, '').length;
+    const timeSec = currentElapsedTime || 0.1; // prevent zero
+    const finalWpm = calculateWPM(charCount, timeSec);
     setWpm(finalWpm);
-  }, [currentSnippet, currentElapsedTime]);
+  }, [currentElapsedTime]);
 
   return {
     startTime,
